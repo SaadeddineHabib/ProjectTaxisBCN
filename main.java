@@ -2,16 +2,32 @@ import java.util.*;
 
 public class main {
 
+    public void showmenu(){
+        System.out.println("What kind of cab would you like to order?");
+        System.out.println("1.- Regular");
+        System.out.println("2.- Special");
+        System.out.println("3.- Exit");
+        System.out.println("Enter the number of the desired option: ");
+    }
+
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
-        System.out.println("Hello, please select the current time. (Day shift: from 08h to 22h and Night shift from 22h to 08h). Hours and minutes have to be separated by :. Example - hh:mm");
+// VARIABLES-------------------------------------------------------------------------------------------
         boolean dayShift = false, nightShift = false;
         int hours, minutes, taxiRegular;
         int taxiSpecial = 0;
         Random rand = new Random();
         String[] carmodels = {"Toyota", "Honda", "Ford", "Nissan", "Chevrolet"};
         String[] taxi_status = {"O", "F", "B"};
+        int numberTaxis = 50;
+        int menuoption = 0;
+        char neededTaxi;
+        int contfree = 0;
+
+        /*  ------ ASK IF ITS DAY OR NIGHT  ------------*/
+        System.out.println("Hello, please select the current time. (Day shift: from 08h to 22h and Night shift from 22h to 08h). Hours and minutes have to be separated by :. Example - hh:mm");
+
         while (true){
             String time = input.nextLine();
             try {
@@ -24,9 +40,17 @@ public class main {
             }
         }
 
-        int numberTaxis = input.nextInt();
-        String[][] taxis = new String[numberTaxis][4];
 
+        // DEFINE NUM TAXIS PER DAY AND NIGHT
+
+
+        if (hours >= 8 && hours < 22){
+            dayShift = true;
+        } else{
+            nightShift = true;
+            numberTaxis /= 2;
+        }
+        String[][] taxis = new String[numberTaxis][4];
         for (int i = 0; i < taxis.length; i++) {
             taxis[i][0] = Integer.toString(i + 1);
             taxis[i][1] = carmodels[rand.nextInt(carmodels.length)];
@@ -38,14 +62,43 @@ public class main {
             }
         }
 
-        int contfree = 0;
-        for (int i = 0; i < taxis.length; i++) {
-            if (taxis[i][2].equals("F")) {
-                System.out.println(Arrays.toString(taxis[i]));
-                contfree++;
+        //MENU
+        do {
+            main menu = new main();
+            menu.showmenu();
+            menuoption = input.nextInt();
+            switch (menuoption){
+                case 1:
+                    for (int i = 0; i < taxis.length; i++) {
+                        if (taxis[i][3].equals("R")) {
+                            if (taxis[i][2].equals("F")) {
+                                System.out.println(Arrays.toString(taxis[i]));
+                                contfree++;
+                            }
+                        }
+                    }
+                    System.out.println("There are " + contfree + " regular taxis");
+
+                    break;
+                case 2:
+                    for (int i = 0; i < taxis.length; i++) {
+                        if (taxis[i][3].equals("S")) {
+                            if (taxis[i][2].equals("F")) {
+                                System.out.println(Arrays.toString(taxis[i]));
+                                contfree++;
+                            }
+                        }
+                    }
+                    System.out.println("There are " + contfree + " special taxis");
+                    break;
+
+                case 3:
+                    System.out.println("Byebye");
+                    break;
             }
-        }
-        System.out.println("There are " + contfree + " free taxis");
+        } while (menuoption != 3);
+
+
 
 
     }
