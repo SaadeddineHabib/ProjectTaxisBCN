@@ -51,11 +51,12 @@ public class main {
             numberTaxis /= 2;
         }
         String[][] taxis = new String[numberTaxis][4];
-        for (int i = 0; i < taxis.length; i++) {
-            taxis[i][0] = Integer.toString(i + 1);
+
+        for (int i = 1; i < taxis.length; i++) {
+            taxis[i][0] = Integer.toString(i);
             taxis[i][1] = carmodels[rand.nextInt(carmodels.length)];
             taxis[i][2] = taxi_status[rand.nextInt(taxi_status.length)];
-            if ((i+1) % 10 == 0){
+            if (i % 10 == 0){
                 taxis[i][3] = "S";
             } else {
                 taxis[i][3] = "R";
