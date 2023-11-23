@@ -34,7 +34,9 @@ public class main {
                 int separate = time.indexOf(':');
                 hours = Integer.parseInt(time.substring(0, separate));
                 minutes = Integer.parseInt(time.substring(separate+1));
-                break;
+                if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60)break;else {
+                    System.out.println("Something went wrong. Please try again: ");
+                }
             }catch (Exception e){
                 System.out.println("Something went wrong. Please try again: ");
             }
@@ -50,9 +52,11 @@ public class main {
             nightShift = true;
             numberTaxis /= 2;
         }
-        String[][] taxis = new String[numberTaxis][4];
 
-        for (int i = 1; i < taxis.length; i++) {
+        String[][] taxis = new String[numberTaxis][4];
+        taxis[0] = new String[]{"ID", "Car Model", "Taxi_status", "Taxi_Type"};
+
+        for (int i = 1; i <= taxis.length-1; i++) {
             taxis[i][0] = Integer.toString(i);
             taxis[i][1] = carmodels[rand.nextInt(carmodels.length)];
             taxis[i][2] = taxi_status[rand.nextInt(taxi_status.length)];
@@ -70,7 +74,8 @@ public class main {
             menuoption = input.nextInt();
             switch (menuoption){
                 case 1:
-                    for (int i = 0; i < taxis.length; i++) {
+                    System.out.println(Arrays.toString(taxis[0]));
+                    for (int i = 1; i <= taxis.length-1; i++) {
                         if (taxis[i][3].equals("R")) {
                             if (taxis[i][2].equals("F")) {
                                 System.out.println(Arrays.toString(taxis[i]));
@@ -79,7 +84,6 @@ public class main {
                         }
                     }
                     System.out.println("There are " + contfree + " regular taxis");
-
                     break;
                 case 2:
                     for (int i = 0; i < taxis.length; i++) {
@@ -98,10 +102,6 @@ public class main {
                     break;
             }
         } while (menuoption != 3);
-
-
-
-
     }
 
 }
