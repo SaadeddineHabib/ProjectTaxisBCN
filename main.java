@@ -26,7 +26,7 @@ public class main {
         int contfree = 0;
 
         /*  ------ ASK IF ITS DAY OR NIGHT  ------------*/
-        System.out.println("Hello, please select the current time. (Day shift: from 08h to 22h and Night shift from 22h to 08h). Hours and minutes have to be separated by :. Example - hh:mm");
+        System.out.println("Hello. (Day shift: from 08h to 22h and Night shift from 22h to 08h). Hours and minutes have to be separated by :. Example - hh:mm");
 
         while (true){
             String time = input.nextLine();
