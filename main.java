@@ -1,8 +1,9 @@
+import java.time.LocalTime;
 import java.util.*;
 
 public class main {
 
-    public void showmenu(){
+    public static void showmenu(){
         System.out.println("What kind of cab would you like to order?");
         System.out.println("1.- Regular");
         System.out.println("2.- Special");
@@ -10,6 +11,15 @@ public class main {
         System.out.println("Enter the number of the desired option: ");
     }
 
+    public static String getCurrentTime() {
+        LocalTime currentTime = LocalTime.now();
+        int hour = currentTime.getHour();
+        return currentTime.toString();
+    }
+
+    public static int numberTaxis = 50;
+
+    public static String[][] taxis = new String[numberTaxis][4];
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
@@ -25,25 +35,13 @@ public class main {
         char neededTaxi;
         int contfree = 0;
 
-        /*  ------ ASK IF ITS DAY OR NIGHT  ------------*/
-        System.out.println("Hello, please select the current time. (Day shift: from 08h to 22h and Night shift from 22h to 08h). Hours and minutes have to be separated by :. Example - hh:mm");
 
-        while (true){
-            String time = input.nextLine();
-            try {
-                int separate = time.indexOf(':');
-                hours = Integer.parseInt(time.substring(0, separate));
-                minutes = Integer.parseInt(time.substring(separate+1));
-                if (hours >= 0 && hours < 24 && minutes >= 0 && minutes < 60)break;else {
-                    System.out.println("Something went wrong. Please try again: ");
-                }
-            }catch (Exception e){
-                System.out.println("Something went wrong. Please try again: ");
-            }
-        }
+        System.out.println("Welcome to Taximanager");
 
-
-        // DEFINE NUM TAXIS PER DAY AND NIGHT
+        String time = getCurrentTime();
+        int separate = time.indexOf(':');
+        hours = Integer.parseInt(time.substring(0, separate));
+        minutes = Integer.parseInt(time.substring(separate+1, separate+3));
 
 
         if (hours >= 8 && hours < 22){
@@ -53,6 +51,7 @@ public class main {
             numberTaxis /= 2;
         }
 
+        System.out.println( numberTaxis);
         String[][] taxis = new String[numberTaxis][4];
         taxis[0] = new String[]{"ID", "Car Model", "Taxi_status", "Taxi_Type"};
 
@@ -69,8 +68,7 @@ public class main {
 
         //MENU
         do {
-            main menu = new main();
-            menu.showmenu();
+            showmenu();
             menuoption = input.nextInt();
             switch (menuoption){
                 case 1:
@@ -101,7 +99,7 @@ public class main {
                     System.out.println("Byebye");
                     break;
             }
-        } while (menuoption != 3);
+        } while (menuoption != 0);
     }
 
 }
