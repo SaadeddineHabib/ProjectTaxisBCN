@@ -3,39 +3,54 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
+
 public class Scratch {
 
+
+    public static Random rand = new Random();
     public static int numberOfservices = 0;
     public static Scanner inputReader = new Scanner(System.in);
-    public static ArrayList<ArrayList<String>> pedidos = new ArrayList<ArrayList<String>>();
+    public static ArrayList<ArrayList<String>> orders = new ArrayList<ArrayList<String>>();
     public static ArrayList<String> array = new ArrayList<>();
+    public static int numberTaxis = 50;
+    public static String[][] taxis = new String[numberTaxis][4];
+
 
     public static String readUserInput() {
         return inputReader.next();
     }
 
-    public static void showSpecfedServie(ArrayList<ArrayList<String>> pedidos) {
-        String serviceId = readUserInput();
-        for (int i = 0; i < pedidos.size(); i++) {
-            for (int j = 0; j < pedidos.get(i).size(); j++) {
-                // TODO: hay que mostrar el servicio que nos dice.
+
+    public static void showSpecfiedOrder() {
+        System.out.println("Please enter the ID of the Order");
+        String orderId = readUserInput();
+        System.out.println(orders);
+        for (int i = 0; i < orders.size(); i++) {
+            for (int j = 0; j < orders.get(i).size() ; j++) {
+                if (orderId.equals(orders.get(i).get(j))){
+                    System.out.println(orders.get(i));
+                }
             }
         }
-        System.out.println();
+
+
     }
 
-    public static void showServiceMenu(){
-        System.out.println("\n1. Add service");
-        System.out.println("2. Show all services");
-        System.out.println("3. Show specifed service");
+
+    public static void showOrderMenu(){
+        System.out.println("\n1. Add order");
+        System.out.println("2. Show all orders");
+        System.out.println("3. Show specifed order");
         System.out.println("\n0. Return to Main menu");
     }
 
-    public static void addArrayListTo2DArraylist(ArrayList<ArrayList<String>> pedidos, ArrayList<String> ArrayList ) {
-        pedidos.add(ArrayList);
+
+    public static void addArrayListTo2DArraylist(ArrayList<String> ArrayList) {
+        orders.add(ArrayList);
     }
 
-    public static void setDefaultDataServiceTaxis(ArrayList<String> ArrayList) {
+
+    public static void setDefaultDataOrderTaxis(ArrayList<String> ArrayList) {
         ArrayList.add("ServiceID");
         ArrayList.add("Taxi");
         ArrayList.add("Person");
@@ -46,16 +61,54 @@ public class Scratch {
         ArrayList.add("LocationEndService");
     }
 
-    public static ArrayList<String> CreateService(String[][] taxis, ArrayList<String> service ) {
+
+
+
+    public static int getFreeTaxi() {
+        int indexRandomTaxi = 0;
+        for (int i = 1; i < taxis.length; i++) {
+            if (taxis[i][2].equals("F")) {
+                indexRandomTaxi = i;
+                break;
+            } else {
+                indexRandomTaxi = -1;
+                // TODO: setOrderToWait(); ES UNA FUNCION PARA PONER EN ESPERA EL SERVICIO
+            }
+        }
+
+
+
+
+        return indexRandomTaxi;
+    }
+
+
+    public static ArrayList<String> CreateOrder() {
+        ArrayList<String> service = new ArrayList<>();
         numberOfservices++;
         service.add(("S"+numberOfservices));
-        Random rand = new Random();
-        int indexRow = rand.nextInt(taxis.length);
-        service.add(taxis[indexRow][0]);
+        int indexRowTaxi = getFreeTaxi();
+        for (int i = 0; i < taxis.length ; i++) {
+            System.out.println(Arrays.toString(taxis[i]));
+        }
+        if (indexRowTaxi != -1) {
+            service.add(taxis[indexRowTaxi][0]);
+            taxis[indexRowTaxi][2] = "O";
+        } else {
+            // TODO: setOrderToWait()
+        }
+
+
+        // TODO:  cancel the order when there aren't free taxi.
+
+
         service.add("person1(it must change by the ID of person)");
         service.add("Running");
         return service;
     }
+
+
+
 
 
 
@@ -67,13 +120,15 @@ public class Scratch {
         Random rand = new Random();
         String[] carmodels = {"Toyota", "Honda", "Ford", "Nissan", "Chevrolet"};
         String[] taxi_status = {"O", "F", "B"};
-        int numberTaxis = 50;
+
+
         int menuoption = 0;
         char neededTaxi;
         int contfree = 0;
 
-        String[][] taxis = new String[numberTaxis][4];
+
         taxis[0] = new String[]{"ID", "Car Model", "Taxi_status", "Taxi_Type"};
+
 
         for (int i = 1; i <= taxis.length-1; i++) {
             taxis[i][0] = Integer.toString(i);
@@ -86,36 +141,40 @@ public class Scratch {
             }
         }
 
-        setDefaultDataServiceTaxis(array);
-        addArrayListTo2DArraylist(pedidos, array);
-        System.out.println(pedidos);
 
-        showServiceMenu();
+        setDefaultDataOrderTaxis(array);
+        addArrayListTo2DArraylist(array);
+
+
+        showOrderMenu();
         int option = sc.nextInt();
         while (option != 0) {
             switch (option) {
                 case 1:
-                    ArrayList<String> service = CreateService(taxis, array);
-                    addArrayListTo2DArraylist(pedidos, service);
+                    ArrayList<String> service = CreateOrder();
+                    addArrayListTo2DArraylist(service);
                     break;
                 case 2:
-                    for (int i = 0; i < pedidos.size(); i++) {
-                        System.out.println(pedidos.get(i));
+                    for (int i = 0; i < orders.size(); i++) {
+                        System.out.println(orders.get(i));
                     }
                     break;
                 case 3:
-                    for (int i = 0; i < taxis.length; i++) {
-                        System.out.println(Arrays.toString(taxis[i]));
-                    }
+                    showSpecfiedOrder();
                     break;
                 case 0:
                     System.out.println("thx and bye");
                     break;
             }
-            showServiceMenu();
+            showOrderMenu();
             option = sc.nextInt();
         }
 
+
     }
 
+
 }
+
+
+
