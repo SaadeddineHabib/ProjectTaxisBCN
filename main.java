@@ -83,12 +83,20 @@ public class main {
         String taxiType = inputReader.next().toUpperCase();
         numberOfservices++;
         service.add(("S"+numberOfservices));
-        int indexRowTaxi = getFreeTaxi();
+        int indexRowTaxi = rand.nextInt(taxis.length);
         // TODO: comprovar porque cuando pongo input S de especial no me asigna un taxi especial.
-        if (indexRowTaxi != -1 && taxis[indexRowTaxi][3].equals(taxiType)) {
-            service.add(taxis[indexRowTaxi][0]);
-            taxis[indexRowTaxi][2] = "O";
+        for (int i = 0; i < taxis.length ; i++) {
+            if (indexRowTaxi != -1 && taxis[indexRowTaxi][3].equals(taxiType)) {
+                service.add(taxis[indexRowTaxi][0]);
+                taxis[indexRowTaxi][2] = "O";
+                break;
+            } else {
+                indexRowTaxi = rand.nextInt(taxis.length);
+            }
         }
+
+
+
 
 
         service.add("person1(it must change by the ID of person)");
