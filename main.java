@@ -13,19 +13,23 @@ public class main {
     public static int numberTaxis = dayShift ? 50 : 25;
     public static String[][] taxis = new String[numberTaxis][4];
 
+    public static String taxiType;
+
     public static String readUserInput() {
         return inputReader.next();
     }
 
     public static void showSpecifiedOrder() {
         System.out.println("Please enter the ID of the Order");
-        String orderId = readUserInput();
-        System.out.println(orders);
-        for (int i = 0; i < orders.size(); i++) {
-            for (int j = 0; j < orders.get(i).size() ; j++) {
-                if (orderId.equals(orders.get(i).get(j))){
-                    System.out.println(orders.get(i));
-                }
+        String orderId = readUserInput().toUpperCase();
+        for (int i = 1; i < orders.size(); i++) {
+            if (orderId.equals(orders.get(i).getFirst())){
+                System.out.println(orders.get(i));
+                break;
+            }
+            else {
+                System.out.println("No service called found " + orderId);
+                break;
             }
         }
 
@@ -60,48 +64,48 @@ public class main {
 
     public static int getFreeTaxi() {
         int indexRandomTaxi = 0;
-        for (int i = 1; i < taxis.length; i++) {
-            if (taxis[i][2].equals("F")) {
-                indexRandomTaxi = i;
+        boolean isFound = false;
+        for (int i = 1; i < taxis.length && !isFound; i++) {
+            for (int j = 0 ; j < taxis[i].length && !isFound; j++) {
+                if (taxis[i][3].equals(taxiType) && taxis[i][2].equals("F")) {
+                    indexRandomTaxi = i;
+                    isFound = true;
+                }
+                else {
+                    indexRandomTaxi = -1;
+                }
                 break;
-            } else {
-                indexRandomTaxi = -1;
-                // TODO: setOrderToWait(); ES UNA FUNCION PARA PONER EN ESPERA EL SERVICIO
             }
         }
-
-
-
-
+        
         return indexRandomTaxi;
     }
 
 
-    public static ArrayList<String> CreateOrder() {
+    public static void CreateOrder() {
         ArrayList<String> service = new ArrayList<>();
         System.out.print("\nWhich type of taxi do you like?\nEnter R for regular and S for special: ");
-        String taxiType = inputReader.next().toUpperCase();
+        taxiType = inputReader.next().toUpperCase();
+        while (!taxiType.equals("R") && !taxiType.equals("S")) {
+            System.out.print("\nError! You must enter R or S!\nEnter R for regular and S for special: ");
+            taxiType = inputReader.next().toUpperCase();
+        }
+        
         numberOfservices++;
         service.add(("S"+numberOfservices));
-        int indexRowTaxi = rand.nextInt(taxis.length);
-        // TODO: comprovar porque cuando pongo input S de especial no me asigna un taxi especial.
-        for (int i = 0; i < taxis.length ; i++) {
-            if (indexRowTaxi != -1 && taxis[indexRowTaxi][3].equals(taxiType)) {
-                service.add(taxis[indexRowTaxi][0]);
-                taxis[indexRowTaxi][2] = "O";
-                break;
-            } else {
-                indexRowTaxi = rand.nextInt(taxis.length);
-            }
+        int indexFreeTaxi = getFreeTaxi();
+        if (indexFreeTaxi != -1) {
+            service.add(taxis[indexFreeTaxi][0]);
+            taxis[indexFreeTaxi][2] = "O";
+            service.add("person1(it must change by the ID of person)");
+            service.add("Running");
+            addArrayListTo2DArraylist(service);
+        } else {
+            System.out.println("All taxi are taken");
+            // TODO: Put the setWaitList
         }
 
 
-
-
-
-        service.add("person1(it must change by the ID of person)");
-        service.add("Running");
-        return service;
     }
 
     public static void showMainMenu() {
@@ -135,7 +139,7 @@ public class main {
         for (int i = 1; i < taxis.length; i++) {
             taxis[i][0] = Integer.toString(i);
             taxis[i][1] = carModels[rand.nextInt(carModels.length)];
-            taxis[i][2] = taxiStatus[rand.nextInt(taxiStatus.length)];
+            taxis[i][2] = taxiStatus[1];
             taxis[i][3] = (i % 10 == 0) ? "S" : "R";
          }
     }
@@ -151,20 +155,12 @@ public class main {
         return map;
     }
     public static int openOrderPanel() {
-        setDefaultDataOrderTaxis(array);
-        addArrayListTo2DArraylist(array);
-
         showOrderMenu();
         int option = inputReader.nextInt();
         while (option != 0) {
             switch (option) {
                 case 1:
-                    if (getFreeTaxi() != -1) {
-                        ArrayList<String> service = CreateOrder();
-                        addArrayListTo2DArraylist(service);
-                    } else {
-                        System.out.println("All taxi are taken.");
-                    }
+                    CreateOrder();
                     break;
                 case 2:
                     for (int i = 0; i < orders.size(); i++) {
@@ -186,6 +182,8 @@ public class main {
     }
     public static void main(String[] args) {
         createDBTaxis();
+        setDefaultDataOrderTaxis(array);
+        addArrayListTo2DArraylist(array);
         int menuOption;
         int menuOrderOption = 0;
         do {
