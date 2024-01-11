@@ -17,7 +17,7 @@ public class main {
         return inputReader.next();
     }
 
-    public static void showSpecfiedOrder() {
+    public static void showSpecifiedOrder() {
         System.out.println("Please enter the ID of the Order");
         String orderId = readUserInput();
         System.out.println(orders);
@@ -34,7 +34,7 @@ public class main {
     public static void showOrderMenu(){
         System.out.println("\n1. Add order");
         System.out.println("2. Show all orders");
-        System.out.println("3. Show specifed order");
+        System.out.println("3. Show specified order");
         System.out.println("\n0. Return to Main menu");
     }
 
@@ -79,21 +79,16 @@ public class main {
 
     public static ArrayList<String> CreateOrder() {
         ArrayList<String> service = new ArrayList<>();
+        System.out.print("\nWhich type of taxi do you like?\nEnter R for regular and S for special: ");
+        String taxiType = inputReader.next().toUpperCase();
         numberOfservices++;
         service.add(("S"+numberOfservices));
         int indexRowTaxi = getFreeTaxi();
-        for (int i = 0; i < taxis.length ; i++) {
-            System.out.println(Arrays.toString(taxis[i]));
-        }
-        if (indexRowTaxi != -1) {
+        // TODO: comprovar porque cuando pongo input S de especial no me asigna un taxi especial.
+        if (indexRowTaxi != -1 && taxis[indexRowTaxi][3].equals(taxiType)) {
             service.add(taxis[indexRowTaxi][0]);
             taxis[indexRowTaxi][2] = "O";
-        } else {
-            // TODO: setOrderToWait()
         }
-
-
-        // TODO:  cancel the order when there aren't free taxi.
 
 
         service.add("person1(it must change by the ID of person)");
@@ -111,7 +106,7 @@ public class main {
         System.out.println("\n0.- Exit");
         System.out.print("\nEnter the number of the desired option: ");
     }
-    private static void displayTypeTaxis(String type) {
+    private static void displayTypeTaxi(String type) {
         int countFreeRegularTaxis = 0;
         System.out.println(Arrays.toString(taxis[0]));
         for (int i = 1; i < taxis.length; i++) {
@@ -156,8 +151,12 @@ public class main {
         while (option != 0) {
             switch (option) {
                 case 1:
-                    ArrayList<String> service = CreateOrder();
-                    addArrayListTo2DArraylist(service);
+                    if (getFreeTaxi() != -1) {
+                        ArrayList<String> service = CreateOrder();
+                        addArrayListTo2DArraylist(service);
+                    } else {
+                        System.out.println("All taxi are taken.");
+                    }
                     break;
                 case 2:
                     for (int i = 0; i < orders.size(); i++) {
@@ -165,7 +164,7 @@ public class main {
                     }
                     break;
                 case 3:
-                    showSpecfiedOrder();
+                    showSpecifiedOrder();
                     break;
                 case 0:
                     System.out.println("thx and bye");
@@ -186,10 +185,10 @@ public class main {
             menuOption = inputReader.nextInt();
             switch (menuOption) {
                 case 1:
-                    displayTypeTaxis("R");
+                    displayTypeTaxi("R");
                     break;
                 case 2:
-                    displayTypeTaxis("S");
+                    displayTypeTaxi("S");
                     break;
                 case 3:
                     System.out.println("\n----Menu Orders----");
