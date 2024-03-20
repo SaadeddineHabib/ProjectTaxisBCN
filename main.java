@@ -11,7 +11,7 @@ public class main {
     public static int hours = getCurrentTime();
     public static boolean dayShift = hours >= 8 && hours < 22;
     public static int numberTaxis = dayShift ? 50 : 25;
-    public static String[][] taxis = new String[numberTaxis][4];
+    public static ArrayList<Taxi> taxis = new ArrayList<>();
 
     public static String taxiType;
 
@@ -81,8 +81,8 @@ public class main {
     public static void CreateOrder() {
         ArrayList<String> service = new ArrayList<>();
         System.out.print("\nWhich type of taxi do you like?\nEnter R for regular and S for special: ");
-        taxiType = inputReader.next().toUpperCase();
-        while (!taxiType.equals("R") && !taxiType.equals("S")) {
+        char taxiType = inputReader.next().toUpperCase().charAt(0);
+        while (!taxiType == 'R' && !taxiType == 'S') {
             System.out.print("\nError! You must enter R or S!\nEnter R for regular and S for special: ");
             taxiType = inputReader.next().toUpperCase();
         }
@@ -130,14 +130,15 @@ public class main {
     private static void createDBTaxis() {
 
         String[] carModels = {"Toyota", "Honda", "Ford", "Nissan", "Chevrolet"};
-        String[] taxiStatus = {"O", "F", "B"};
-        taxis[0] = new String[]{"ID", "Car Model", "Taxi_status", "Taxi_Type"};
+        char[] taxiStatus = {'O', 'F', 'B'};
 
-        for (int i = 1; i < taxis.length; i++) {
-            taxis[i][0] = Integer.toString(i);
-            taxis[i][1] = carModels[rand.nextInt(carModels.length)];
-            taxis[i][2] = taxiStatus[1];
-            taxis[i][3] = (i % 10 == 0) ? "S" : "R";
+        for (int i = 1; i < numberTaxis; i++) {
+            String id = "ID00" + Integer.toString(i);
+            String carModel = carModels[rand.nextInt(carModels.length)];
+            char Status = taxiStatus[1];
+            char Type = (i % 10 == 0) ? 'S' : 'R';
+            Taxi taxi = new Taxi(id, carModel, Status, Type);
+            taxis.add(taxi);
         }
     }
 
