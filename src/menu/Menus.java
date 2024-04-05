@@ -13,11 +13,15 @@ public class Menus {
     public String showMainMenu() {
         LocalTime now = LocalTime.now();
         return "Current time is " + now.toString().substring(0, 8) +
-                "\n\n----Main Src.Menu----" +
-                "\n\n1.- Show regular taxis"  +
-                "\n2.- Show special taxis" +
-                "\n3.- Enter Orders menu"  +
-                "\n0.- Exit" +
+                "\n\n----Main Menu----" +
+                "\n\n1.- Add taxi" +
+                "\n2.- Remove taxi" +
+                "\n3.- Show regular taxis"  +
+                "\n4.- Show special taxis" +
+                "\n5.- Show taxis" +
+                "\n6.- Show specific taxis" +
+                "\n7.- Enter Orders menu"  +
+                "\n\n0.- Exit" +
                 "\n\nEnter the number of the desired option: ";
     }
 }

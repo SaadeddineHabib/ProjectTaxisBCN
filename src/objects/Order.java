@@ -9,7 +9,7 @@ public class Order {
     private String LocationStartService;
     private String LocationEndService;
 
-    enum State {
+    public enum State {
         STARTED, CANCELED, FINISHED;
     }
 

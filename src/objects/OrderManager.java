@@ -3,10 +3,10 @@ package src.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Orders {
+public class OrderManager {
     private List<Order> orders;
 
-    public Orders() {
+    public OrderManager() {
         orders = new ArrayList<>();
     }
 
@@ -22,13 +22,6 @@ public class Orders {
         orders.remove(order);
     }
 
-    public void modifyFieldOrder(String  serviceId, String nombreCampo) {
-        Order order = findSpecifiedOrder(serviceId);
-        if (order != null){
-            // Todo: comprovar si existe campo
-        }
-    }
-
     public Order findSpecifiedOrder(String serviceId) {
         Order order = null;
         for (Order orderToFind : orders) {
@@ -39,6 +32,14 @@ public class Orders {
         }
         return order;
 
+    }
+
+    public void showOrders() {
+        System.out.println("##### ORDERS LIST ####");
+        for (Order order : orders) {
+            System.out.println(order);
+        }
+        System.out.println();
     }
 
     @Override
