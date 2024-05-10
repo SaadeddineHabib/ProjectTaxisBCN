@@ -1,3 +1,5 @@
+package src.others;
+
 import java.util.Scanner;
 
 public class funcionDistancia {

@@ -1,4 +1,4 @@
-package src.menu;
+package src.ui;
 
 import java.time.LocalTime;
 
@@ -7,13 +7,13 @@ public class Menus {
         return "\n\n1. Add order" +
                 "\n2. Show all orders" +
                 "\n3. Show specified order" +
-                "\n\n0. Return to Main menu"  +
+                "\n\n0. Return to src.Main menu"  +
                 "\n\nEnter the number of the desired option: ";
     }
     public String showMainMenu() {
         LocalTime now = LocalTime.now();
         return "Current time is " + now.toString().substring(0, 8) +
-                "\n\n----Main Menu----" +
+                "\n\n----src.Main Menu----" +
                 "\n\n1.- Add taxi" +
                 "\n2.- Remove taxi" +
                 "\n3.- Show regular taxis"  +

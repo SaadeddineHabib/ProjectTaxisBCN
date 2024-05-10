@@ -1,3 +1,5 @@
+package src.others;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -41,7 +43,7 @@ public class Scratch {
         System.out.println("\n1. Add order");
         System.out.println("2. Show all orders");
         System.out.println("3. Show specifed order");
-        System.out.println("\n0. Return to Main menu");
+        System.out.println("\n0. Return to src.Main menu");
     }
 
 

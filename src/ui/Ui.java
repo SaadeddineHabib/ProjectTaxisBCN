@@ -1,4 +1,4 @@
-package src.menu;
+package src.ui;
 
 import src.objects.Order;
 import src.objects.OrderManager;

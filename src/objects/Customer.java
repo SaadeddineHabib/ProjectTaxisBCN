@@ -4,8 +4,6 @@ public class Customer {
     private String id;
     private String name;
     private String lastName;
-
-
     private int age;
     private String gender;
 
