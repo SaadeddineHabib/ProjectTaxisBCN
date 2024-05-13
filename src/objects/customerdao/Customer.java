@@ -1,23 +1,26 @@
-package src.objects;
+package src.objects.customerdao;
 
 public class Customer {
-    private String id;
+    private int id;
     private String name;
     private String lastName;
     private int age;
-    private String gender;
 
-    public Customer(String name, String lastName, int age, String gender) {
+    public Customer(int id, String name, String lastName, int age) {
+        this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.age = age;
-        this.gender = gender;
     }
-    public String getId() {
+
+    public Customer() {
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -45,24 +48,13 @@ public class Customer {
         this.age = age;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-
-
-
     @Override
     public String toString() {
-        return "Persona{" +
-                "name='" + name + '\'' +
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", age='" + age + '\'' +
-                ", gender='" + gender + '\'' +
+                ", age=" + age +
                 '}';
     }
 

@@ -1,18 +1,15 @@
-package src.objects;
+package src.others;
 
-import java.util.ArrayList;
+import src.objects.customerdao.Customer;
+
 import java.util.List;
 
-public class Customers {
+public class CustomerManager {
     int numberId = 0;
 
     private List<Customer> customers;
 
-    public Customers() {
-        customers = new ArrayList<>();
-    }
-
-    public Customers(int numberId, List<Customer> customers) {
+    public CustomerManager(int numberId, List<Customer> customers) {
         this.numberId = numberId;
         this.customers = customers;
     }
@@ -33,17 +30,17 @@ public class Customers {
         customers.remove(customer);
     }
 
-    public Customer findSpecifiedCustomerForId(String customerId) {
-        Customer customer = null;
-        for (Customer customerToFind : customers) {
-            if (customerToFind.getId().equals(customerId)) {
-                customer = customerToFind;
-                break;
-            }
-        }
-
-        return customer;
-    }
+//    public Customer findSpecifiedCustomerForId(String customerId) {
+//        Customer customer = null;
+//        for (Customer customerToFind : customers) {
+//            if (customerToFind.getId().equals(customerId)) {
+//                customer = customerToFind;
+//                break;
+//            }
+//        }
+//
+//        return customer;
+//    }
 
     @Override
     public String toString() {
