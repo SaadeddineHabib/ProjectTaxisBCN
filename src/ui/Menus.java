@@ -1,69 +1,65 @@
 package src.ui;
 
-import java.time.LocalTime;
-
 public class Menus {
     public String showOrderMenu() {
         return """
+                                
+                ----Order Menu----
 
                 1. Add order
                 2. Remove order
-                3. Show one order
-                4. Show orders
+                3. Modify order
+                4. Show one order
+                5. Show orders
                  
                 0. Return to Main menu
 
-                Enter the number of the desired option:\s
-                """;
+                Enter the number of the desired option:\s""";
     }
 
     public String showCustomerMenu() {
-        LocalTime now = LocalTime.now();
         return """
                             
-                ----Main Menu----
-               
+                ----Customer Menu----
+                               
                 1.- Add customer
                 2.- Remove customer
-                3.- Show one customer
-                4.- Show customers
-      
-                0.- Return to Main menu"
-                
-                Enter the number of the desired option:\s
-                """;
+                3.- Modify customer
+                4.- Show one customer
+                5.- Show customers
+                      
+                0.- Return to Main menu
+                                
+                Enter the number of the desired option:\s""";
     }
+
     public String showTaxiMenu() {
-        LocalTime now = LocalTime.now();
         return """
                             
-                ----Main Menu----
-               
+                ----Taxi Menu----
+                               
                 1.- Add taxi
                 2.- Remove taxi
-                3.- Show one taxi
-                4.- Show taxis
-      
-                0.- Return to Main menu"
-                
-                Enter the number of the desired option:\s
-                """;
+                3.- Modify taxi
+                4.- Show one taxi
+                5.- Show taxis
+                      
+                0.- Return to Main menu
+                                
+                Enter the number of the desired option:\s""";
     }
+
     public String showMainMenu() {
-        LocalTime now = LocalTime.now();
         return """
                             
                 ----Main Menu----
-               
-                1.- Add taxi
-                2.- Remove taxi
-                3.- Show specific taxis
-                4.- Show taxis
-                5.- Enter Orders menu
-      
+                                
+                1.- Enter taxi management menu
+                2.- Enter order management menu
+                3.- Enter customer management menu
+                      
                 0.- Exit"
-                
-                Enter the number of the desired option:\s
-                """;
+                                
+                Enter the number of the desired option:\s """;
     }
 }
