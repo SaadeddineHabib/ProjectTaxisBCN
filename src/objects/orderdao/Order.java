@@ -97,13 +97,14 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "ServiceID='" + orderId + '\'' +
+                "orderId=" + orderId +
                 ", taxi=" + taxi +
                 ", state=" + state +
-                ", DateStartService='" + DateStartOrder + '\'' +
-                ", DateEndService='" + DateEndOrder + '\'' +
-                ", LocationStartService='" + LocationStartOrder + '\'' +
-                ", LocationEndService='" + LocationEndOrder + '\'' +
+                ", customer=" + customer +
+                ", DateStartOrder=" + DateStartOrder +
+                ", DateEndOrder=" + DateEndOrder +
+                ", LocationStartOrder='" + LocationStartOrder + '\'' +
+                ", LocationEndOrder='" + LocationEndOrder + '\'' +
                 '}';
     }
 }

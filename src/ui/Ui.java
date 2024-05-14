@@ -1,11 +1,19 @@
 package src.ui;
 
+import src.objects.carmodeldao.CarModel;
+import src.objects.carmodeldao.CarModelCRUD;
 import src.objects.customerdao.Customer;
 import src.objects.customerdao.CustomerCRUD;
 import src.objects.orderdao.Order;
 import src.objects.orderdao.OrderCRUD;
+import src.objects.orderstatusdao.OrderState;
+import src.objects.orderstatusdao.OrderStateCRUD;
 import src.objects.taxidao.Taxi;
 import src.objects.taxidao.TaxiCRUD;
+import src.objects.taxistatusdao.TaxiStatus;
+import src.objects.taxistatusdao.TaxiStatusCRUD;
+import src.objects.taxitypedao.TaxiType;
+import src.objects.taxitypedao.TaxiTypeCRUD;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -17,6 +25,11 @@ public class Ui {
     private static TaxiCRUD taxiCRUD = new TaxiCRUD();
     private static OrderCRUD orderCRUD = new OrderCRUD();
     private static CustomerCRUD customerCRUD = new CustomerCRUD();
+    private static CarModelCRUD carModelCRUD = new CarModelCRUD();
+    private static TaxiStatusCRUD taxiStatusCRUD = new TaxiStatusCRUD();
+    private static TaxiTypeCRUD taxiTypeCRUD = new TaxiTypeCRUD();
+    private static OrderStateCRUD orderStateCRUD = new OrderStateCRUD();
+
     public static Menus menus = new Menus();
 
     public int getControlledIntegerInput(String textToDisplay) {
@@ -97,7 +110,7 @@ public class Ui {
                     modifyOneCustomer();
                     break;
                 case 4:
-                    showOneOrder();
+                    showOneCustomer();
                     break;
                 case 5:
                     showCustomers();
@@ -134,31 +147,99 @@ public class Ui {
     }
 
     private void showOneTaxi() throws SQLException {
-        int idTaxi = getControlledIntegerInput("Introdueix quin Taxi vols veure: ");
+        Taxi taxi = null;
 
-        System.out.println(taxiCRUD.read(idTaxi));
+        int taxiId = getControlledIntegerInput("Introdueix el id del taxi que vols veure: ");
+        taxi = taxiCRUD.read(taxiId);
+
+        while (taxi == null) {
+            System.out.println("Error! El id no s'ha trobat");
+            taxiId = getControlledIntegerInput("Introdueix el id del taxi que vols veure: ");
+            taxi = taxiCRUD.read(taxiId);
+        }
+        System.out.println();
+        System.out.println(taxi);
     }
 
     private void createNewTaxi() throws SQLException {
+        CarModel carModel = null;
+        TaxiStatus taxiStatus = null;
+        TaxiType type = null;
+
         int taxiModelId = getControlledIntegerInput("Introdueix el id del model del taxi: ");
         int taxisStatusId = getControlledIntegerInput("Introdueix el id del estat del taxi: ");
         int taxisTypeId = getControlledIntegerInput("Introdueix el id del tipus de taxi: ");
+
+        carModel = carModelCRUD.read(taxiModelId);
+        taxiStatus = taxiStatusCRUD.read(taxisStatusId);
+        type = taxiTypeCRUD.read(taxisTypeId);
+
+        while (carModel == null || taxiStatus == null  || type == null ) {
+            System.out.println("Error! Dades incorrecte sisplau introdueix ids existents en la base de dades");
+            taxiModelId = getControlledIntegerInput("Introdueix el id del model del taxi: ");
+            taxisStatusId = getControlledIntegerInput("Introdueix el id del estat del taxi: ");
+            taxisTypeId = getControlledIntegerInput("Introdueix el id del tipus de taxi: ");
+
+            carModel = carModelCRUD.read(taxiModelId);
+            taxiStatus = taxiStatusCRUD.read(taxisStatusId);
+            type = taxiTypeCRUD.read(taxisTypeId);
+        }
+
 
         System.out.println("Creat taxi: " + taxiCRUD.create(new Taxi(0, taxiModelId, taxisStatusId, taxisTypeId)));
     }
 
     private void modifyOneTaxi() throws SQLException {
-        int taxiId = getControlledIntegerInput("Introdueix el nou id del taxi: ");
+        CarModel carModel = null;
+        TaxiStatus taxiStatus = null;
+        TaxiType type = null;
+        Taxi taxi = null;
+
+        int taxiId = getControlledIntegerInput("Introdueix el id del taxi que vols modificar: ");
+        taxi = taxiCRUD.read(taxiId);
+
+        while (taxi == null) {
+            System.out.println("Error! El id no s'ha trobat");
+            taxiId = getControlledIntegerInput("Introdueix el id del taxi que vols modificar: ");
+            taxi = taxiCRUD.read(taxiId);
+        }
+
         int taxiModelId = getControlledIntegerInput("Introdueix el nou id del model del taxi: ");
         int taxisStatusId = getControlledIntegerInput("Introdueix el nou id del estat del taxi: ");
         int taxisTypeId = getControlledIntegerInput("Introdueix el nou id del tipus de taxi: ");
 
-        taxiCRUD.update(new Taxi(taxiId, taxiModelId, taxisStatusId, taxisTypeId));
+
+        while (carModel == null || taxiStatus == null  || type == null ) {
+            System.out.println("Error! Dades incorrecte sisplau introdueix ids existents en la base de dades");
+            taxiModelId = getControlledIntegerInput("Introdueix el id del model del taxi: ");
+            taxisStatusId = getControlledIntegerInput("Introdueix el id del estat del taxi: ");
+            taxisTypeId = getControlledIntegerInput("Introdueix el id del tipus de taxi: ");
+
+            carModel = carModelCRUD.read(taxiModelId);
+            taxiStatus = taxiStatusCRUD.read(taxisStatusId);
+            type = taxiTypeCRUD.read(taxisTypeId);
+        }
+
+        taxi.setCarModel(taxiModelId);
+        taxi.setTaxiStatus(taxisStatusId);
+        taxi.setTaxiType(taxisTypeId);
+
+        taxiCRUD.update(taxi);
     }
 
     public void deleteOneTaxi() throws SQLException {
-        int taxiId = getControlledIntegerInput("Introdueix el id del taxi: ");
-        taxiCRUD.delete(taxiId);
+        Taxi taxi = null;
+
+        int taxiId = getControlledIntegerInput("Introdueix el id del taxi que vols eliminar: ");
+        taxi = taxiCRUD.read(taxiId);
+
+        while (taxi == null) {
+            System.out.println("Error! El id no s'ha trobat");
+            taxiId = getControlledIntegerInput("Introdueix el id del taxi que vols eliminar: ");
+            taxi = taxiCRUD.read(taxiId);
+        }
+
+        taxiCRUD.delete(taxi.getTaxiId());
     }
 
 
@@ -169,54 +250,133 @@ public class Ui {
     }
 
     private void showOneOrder() throws SQLException {
-        int idOrder = getControlledIntegerInput("Introdueix quin order vols veure: ");
+        Order order = null;
 
-        System.out.println(orderCRUD.read(idOrder));
+        int idOrder = getControlledIntegerInput("Introdueix quin order vols veure: ");
+        order = orderCRUD.read(idOrder);
+
+        while (order == null) {
+            System.out.println("Error! El id no s'ha trobat");
+            idOrder = getControlledIntegerInput("Introdueix quin order vols veure: ");
+            order = orderCRUD.read(idOrder);
+        }
+
+        System.out.println();
+        System.out.println(order);
     }
 
     private void createNewOrder() throws SQLException {
+        Taxi taxi = null;
+        OrderState orderState = null;
+        Customer customer = null;
+
         int orderTaxiId = getControlledIntegerInput("Introdueix el id del taxi: ");
         int orderStatusId = getControlledIntegerInput("Introdueix el id del estat del order: ");
         int orderCustomerId = getControlledIntegerInput("Introdueix el id de client: ");
 
-        System.out.print("Introdueix la data de comenci del servei en aquest format(dd/mm/yy hh:mm:ss): ");
+        taxi = taxiCRUD.read(orderTaxiId);
+        orderState = orderStateCRUD.read(orderStatusId);
+        customer = customerCRUD.read(orderCustomerId);
+
+        while (taxi == null || orderState == null || customer == null) {
+            System.out.println("Error! Dades incorrecte sisplau introdueix ids existents en la base de dades");
+            orderTaxiId = getControlledIntegerInput("Introdueix el id del taxi: ");
+            orderStatusId = getControlledIntegerInput("Introdueix el id del estat del order: ");
+            orderCustomerId = getControlledIntegerInput("Introdueix el id de client: ");
+
+            taxi = taxiCRUD.read(orderTaxiId);
+            orderState = orderStateCRUD.read(orderStatusId);
+            customer = customerCRUD.read(orderCustomerId);
+
+        }
+
+        sc.nextLine();
+        System.out.print("Introdueix la data de comenci del servei en aquest format(dd/mm/yyyy hh:mm:ss): ");
         LocalDateTime dateStartOrder = orderCRUD.convertStringToLocalDateSqlite(sc.nextLine());
-        System.out.print("Introdueix la data de fi del servei en aquest format(dd/mm/yy hh:mm:ss): ");
+        System.out.print("Introdueix la data de fi del servei en aquest format(dd/mm/yyyy hh:mm:ss): ");
         LocalDateTime dateEndOrder = orderCRUD.convertStringToLocalDateSqlite(sc.nextLine());
         System.out.print("Introdueix la localitzacio de comenci del servei en aquest format (x.y): ");
-        String LocationStartOrder = sc.nextLine();
+        String locationStartOrder = sc.nextLine();
         System.out.print("Introdueix la localitzacio de fi del servei en aquest format (x.y): ");
-        String LocationEndOrder = sc.nextLine();
-
+        String locationEndOrder = sc.nextLine();
 
         System.out.println("Creat order: " + orderCRUD.create(new Order(0, orderTaxiId, orderStatusId, orderCustomerId,
-                dateStartOrder, dateEndOrder, LocationStartOrder, LocationEndOrder)));
+                dateStartOrder, dateEndOrder, locationStartOrder, locationEndOrder)));
     }
 
     private void modifyOneOrder() throws SQLException {
+        Taxi taxi = null;
+        OrderState orderState = null;
+        Customer customer = null;
+        Order order = null;
+
         int orderId = getControlledIntegerInput("Introdueix el id de order que vols modificar: ");
+        order = orderCRUD.read(orderId);
 
-        int orderTaxiId = getControlledIntegerInput("Introdueix el nou id del model del taxi: ");
-        int orderStatusId = getControlledIntegerInput("Introdueix el nou id del estat del taxi: ");
-        int orderCustomerId = getControlledIntegerInput("Introdueix el nou id del tipus de taxi: ");
+        while (order == null) {
+            System.out.println("Error! El id no s'ha trobat");
+            orderId = getControlledIntegerInput("Introdueix el id de order que vols modificar: ");
+            order = orderCRUD.read(orderId);
+        }
 
-        System.out.print("Introdueix la data de comenci del servei en aquest format(dd/mm/yy hh:mm:ss): ");
+        int orderTaxiId = getControlledIntegerInput("Introdueix el nou id del taxi: ");
+        int orderStatusId = getControlledIntegerInput("Introdueix el nou id del estat del order: ");
+        int orderCustomerId = getControlledIntegerInput("Introdueix el nou id client de order: ");
+
+        taxi = taxiCRUD.read(orderTaxiId);
+        orderState = orderStateCRUD.read(orderStatusId);
+        customer = customerCRUD.read(orderCustomerId);
+
+        while (taxi == null || orderState == null || customer == null) {
+            System.out.println("Error! Dades incorrecte sisplau introdueix ids existents en la base de dades");
+            orderTaxiId = getControlledIntegerInput("Introdueix el id del taxi: ");
+            orderStatusId = getControlledIntegerInput("Introdueix el id del estat del order: ");
+            orderCustomerId = getControlledIntegerInput("Introdueix el id de client: ");
+
+            taxi = taxiCRUD.read(orderTaxiId);
+            orderState = orderStateCRUD.read(orderStatusId);
+            customer = customerCRUD.read(orderCustomerId);
+
+        }
+
+        sc.nextLine();
+        System.out.print("Introdueix la data de comenci del servei en aquest format(dd/mm/yyyy hh:mm:ss): ");
         LocalDateTime dateStartOrder = orderCRUD.convertStringToLocalDateSqlite(sc.nextLine());
-        System.out.print("Introdueix la data de fi del servei en aquest format(dd/mm/yy hh:mm:ss): ");
+        System.out.print("Introdueix la data de fi del servei en aquest format(dd/mm/yyyy hh:mm:ss): ");
         LocalDateTime dateEndOrder = orderCRUD.convertStringToLocalDateSqlite(sc.nextLine());
         System.out.print("Introdueix la localitzacio de comenci del servei en aquest format (x.y): ");
-        String LocationStartOrder = sc.nextLine();
+        String locationStartOrder = sc.nextLine();
         System.out.print("Introdueix la localitzacio de fi del servei en aquest format (x.y): ");
-        String LocationEndOrder = sc.nextLine();
+        String locationEndOrder = sc.nextLine();
+
+        order.setState(orderStatusId);
+        order.setTaxi(orderTaxiId);
+        order.setCustomer(orderCustomerId);
+        order.setLocationStartOrder(locationStartOrder);
+        order.setLocationEndOrder(locationEndOrder);
+        order.setDateStartOrder(dateStartOrder);
+        order.setDateEndOrder(dateEndOrder);
 
         orderCRUD.update(new Order(orderId, orderTaxiId, orderStatusId, orderCustomerId,
-                dateStartOrder, dateEndOrder, LocationStartOrder, LocationEndOrder));
+                dateStartOrder, dateEndOrder, locationStartOrder, locationEndOrder));
     }
 
     public void deleteOneOrder() throws SQLException {
-        int orderId = getControlledIntegerInput("Introdueix el id del order: ");
-        orderCRUD.delete(orderId);
+        Order order = null;
+
+        int idOrder = getControlledIntegerInput("Introdueix quin order vols eliminar: ");
+        order = orderCRUD.read(idOrder);
+
+        while (order == null) {
+            System.out.println("Error! El id no s'ha trobat");
+            idOrder = getControlledIntegerInput("Introdueix quin order vols eliminar: ");
+            order = orderCRUD.read(idOrder);
+        }
+
+        orderCRUD.delete(order.getOrderId());
     }
+
+    //TODO: FALTA CUSTOMERS
 
     private void showCustomers() throws SQLException {
         for (Customer customer : customerCRUD.getEntities()) {
@@ -230,6 +390,7 @@ public class Ui {
     }
 
     private void createNewCustomer() throws SQLException {
+        sc.nextLine();
         System.out.print("Introdueix el nom del client: ");
         String customerName = sc.nextLine();
         System.out.print("Introdueix el cognom del client: ");
@@ -242,6 +403,7 @@ public class Ui {
     private void modifyOneCustomer() throws SQLException {
         int idCustomer = getControlledIntegerInput("Introdueix quin client vols modificar: ");
         System.out.print("Introdueix el nom del client: ");
+        sc.nextLine();
         String customerName = sc.nextLine();
         System.out.print("Introdueix el cognom del client: ");
         String customerLastname = sc.nextLine();
