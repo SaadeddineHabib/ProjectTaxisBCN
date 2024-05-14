@@ -22,11 +22,11 @@ public class Menus {
                             
                 ----Customer Menu----
                                
-                1.- Add carModel
-                2.- Remove carModel
-                3.- Modify carModel
-                4.- Show one carModel
-                5.- Show carModels
+                1.- Add customer
+                2.- Remove customer
+                3.- Modify customer
+                4.- Show one customer
+                5.- Show customer
                       
                 0.- Return to Main menu
                                 
@@ -56,7 +56,8 @@ public class Menus {
                                 
                 1.- Enter taxi management menu
                 2.- Enter order management menu
-                3.- Enter carModel management menu
+                3.- Enter customer management menu
+                4.- Show map
                       
                 0.- Exit
                                 

@@ -1,5 +1,6 @@
 package src.ui;
 
+import src.map.Map;
 import src.objects.carmodeldao.CarModel;
 import src.objects.carmodeldao.CarModelCRUD;
 import src.objects.customerdao.Customer;
@@ -29,6 +30,7 @@ public class Ui {
     private static TaxiStatusCRUD taxiStatusCRUD = new TaxiStatusCRUD();
     private static TaxiTypeCRUD taxiTypeCRUD = new TaxiTypeCRUD();
     private static OrderStateCRUD orderStateCRUD = new OrderStateCRUD();
+    private static Map map = new Map();
 
     public static Menus menus = new Menus();
 
@@ -135,6 +137,9 @@ public class Ui {
                 case 3:
                     runCustomerPanel();
                     break;
+                case 4:
+                    showMap();
+                    break;
             }
             opcio = getControlledIntegerInput(menus.showMainMenu());
         }
@@ -174,7 +179,7 @@ public class Ui {
         taxiStatus = taxiStatusCRUD.read(taxisStatusId);
         type = taxiTypeCRUD.read(taxisTypeId);
 
-        while (carModel == null || taxiStatus == null  || type == null ) {
+        while (carModel == null || taxiStatus == null || type == null) {
             System.out.println("Error! Dades incorrecte sisplau introdueix ids existents en la base de dades");
             taxiModelId = getControlledIntegerInput("Introdueix el id del model del taxi: ");
             taxisStatusId = getControlledIntegerInput("Introdueix el id del estat del taxi: ");
@@ -209,7 +214,7 @@ public class Ui {
         int taxisTypeId = getControlledIntegerInput("Introdueix el nou id del tipus de taxi: ");
 
 
-        while (carModel == null || taxiStatus == null  || type == null ) {
+        while (carModel == null || taxiStatus == null || type == null) {
             System.out.println("Error! Dades incorrecte sisplau introdueix ids existents en la base de dades");
             taxiModelId = getControlledIntegerInput("Introdueix el id del model del taxi: ");
             taxisStatusId = getControlledIntegerInput("Introdueix el id del estat del taxi: ");
@@ -376,7 +381,6 @@ public class Ui {
         orderCRUD.delete(order.getOrderId());
     }
 
-    //TODO: FALTA CUSTOMERS
 
     private void showCustomers() throws SQLException {
         for (Customer customer : customerCRUD.getEntities()) {
@@ -385,8 +389,18 @@ public class Ui {
     }
 
     private void showOneCustomer() throws SQLException {
-        int idCustomer = getControlledIntegerInput("Introdueix quin client vols veure: ");
-        System.out.println(customerCRUD.read(idCustomer));
+        Customer customer = null;
+
+        int idClient = getControlledIntegerInput("Introdueix quin client vols veure: ");
+        customer = customerCRUD.read(idClient);
+
+        while (customer == null) {
+            System.out.println("Error! El id no s'ha trobat");
+            idClient = getControlledIntegerInput("Introdueix quin client vols eliminar: ");
+            customer = customerCRUD.read(idClient);
+        }
+
+        System.out.println(customer);
     }
 
     private void createNewCustomer() throws SQLException {
@@ -401,20 +415,61 @@ public class Ui {
     }
 
     private void modifyOneCustomer() throws SQLException {
+        Customer customer = null;
+
         int idCustomer = getControlledIntegerInput("Introdueix quin client vols modificar: ");
-        System.out.print("Introdueix el nom del client: ");
+        customer = customerCRUD.read(idCustomer);
+
+        while (customer == null) {
+            System.out.println("Error! El id no s'ha trobat");
+            idCustomer = getControlledIntegerInput("Introdueix quin client vols modificar: ");
+            customer = customerCRUD.read(idCustomer);
+        }
+
         sc.nextLine();
+        System.out.print("Introdueix el nom del client: ");
         String customerName = sc.nextLine();
         System.out.print("Introdueix el cognom del client: ");
         String customerLastname = sc.nextLine();
         int customerAge = getControlledIntegerInput("Introdueix la edat del client: ");
 
-        customerCRUD.update(new Customer(idCustomer, customerName, customerLastname, customerAge));
+        customer.setName(customerName);
+        customer.setLastName(customerLastname);
+        customer.setAge(customerAge);
+
+        customerCRUD.update(customer);
     }
 
     public void deleteOneCustomer() throws SQLException {
-        int customerId = getControlledIntegerInput("Introdueix el id del customer: ");
-        customerCRUD.delete(customerId);
+        Customer customer = null;
+
+        int idClient = getControlledIntegerInput("Introdueix quin client vols veure: ");
+        customer = customerCRUD.read(idClient);
+
+        while (customer == null) {
+            System.out.println("Error! El id no s'ha trobat");
+            idClient = getControlledIntegerInput("Introdueix quin client vols eliminar: ");
+            customer = customerCRUD.read(idClient);
+        }
+
+        customerCRUD.delete(customer.getId());
     }
+
+    public void showMap() throws SQLException {
+        for (int i = 15; i < taxiCRUD.getEntities().size(); i++) {
+            int taxiId = taxiCRUD.getEntities().get(i).getTaxiId();
+            map.addItem("T"+taxiId, 0, 0);
+        }
+
+        for (int i = 0; i < customerCRUD.getEntities().size(); i++) {
+            int customerId = customerCRUD.getEntities().get(i).getId();
+            map.addItem("C"+customerId, 0, 0);
+        }
+
+        map.refreshMap();
+        map.showMap();
+
+    }
+
 
 }
